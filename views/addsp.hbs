@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <title>Hello, world! </title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="padding-left: 15%;">
+    <!-- Brand -->
+    <a class="navbar-brand" href="/trangchu">SHOP LG</a>
+    <!-- Links -->
+    <ul class="navbar-nav">
+      <!-- Dropdown -->
+      <li class="nav-item dropdown" style="margin: 5xp;">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          SẢN PHẨM
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/themsanpham">THÊM SẢN PHẨM</a>
+      </li>
+    </ul>
+  </nav>
+  <br>
+
+  <div class="container align-center" style="margin-left: 30%;">
+    <form method="POST" action="/addspA" enctype="multipart/form-data">
+      <span style="color: red;">{{text}}</span>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 130px;text-align: center;">Mã ô tô</span>
+        </div>
+        <input name="tensp" class="form-control" type="text"></input>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 130px;text-align: center;">Hình ảnh</span>
+        </div>
+        <div class="col" style="margin-bottom: 15px;">
+          <input style="padding-bottom: 35px" class=" form-control" type="file" name="avatar">
+        </div>
+
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 130px;text-align: center;">Nhãn hiệu</span>
+        </div>
+        <input name="loaisp" class="form-control" type="text"></input>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 130px;text-align: center;">Năm sản xuất</span>
+        </div>
+        <input name="hangsp" class="form-control" type="number"></input>
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 130px;text-align: center;">Giá gốc</span>
+        </div>
+        <input name="mausp" class="form-control" type="number"></input>
+      </div>
+
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 130px;text-align: center;">Giá sản phẩm</span>
+        </div>
+        <input name="giasp" class="form-control" type="number"></input>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="margin-left: 20%;">Xác nhận</button>
+
+    </form>
+  </div>
+
+  {{!-- <div class="d-flex justify-content-center">
+    <form style="width: 400px" method="post" action="/addspA" enctype="multipart/form-data">
+      <h1 class="d-flex justify-content-center">Add a product</h1>
+
+      <div class="col" style="margin-bottom: 15px">
+        <label>Tên sản phẩm</label>
+        <input name="tensp" class="form-control" type="text"></input>
+      </div>
+      <div class="col" style="margin-bottom: 15px">
+        <label>Giá sản phẩm</label>
+        <input name="giasp" class="form-control" type="text"></input>
+      </div>
+      <div class="col" style="margin-bottom: 15px">
+        <label>Mô tả sản phẩm</label>
+        <input name="motasp" class="form-control" type="text"></input>
+      </div>
+
+      <div class="col" style="margin-bottom: 15px">
+        <label>Mô tả sản phẩm</label>
+        <input name="motasp" class="form-control" type="text"></input>
+      </div>
+
+      <div class="col" style="margin-bottom: 15px">
+        <label>Mô tả sản phẩm</label>
+        <input name="motasp" class="form-control" type="text"></input>
+      </div>
+
+      <div class="col" style="margin-bottom: 15px;">
+        <input style="padding-bottom: 35px" class=" form-control" type="file" name="avatar">
+      </div>
+
+      <div style="text-align: center">
+        <input class="col-3 btn btn-dark" type="submit" value="ADD">
+      </div>
+
+    </form> --}}
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

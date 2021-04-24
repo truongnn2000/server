@@ -1,0 +1,427 @@
+let express = require('express');
+
+let hbs = require('express-handlebars');
+
+let multer = require('multer');
+var parser= require('body-parser');
+
+let app = express();
+
+app.use(express.urlencoded({ extended: true }));
+// ép kiểu dữ liệu khi dùng post
+app.use(parser.json());
+app.use(parser.urlencoded({extend : true}));
+
+let mongoose= require('mongoose');
+let accountSchema = require('./model/accountSchema');
+let sanphamSchema = require('./model/sanphamSchema');
+let khachhangSchema= require('./model/khachhangSchema');
+let dathangSchema= require('./model/dathangSchema');
+let User = mongoose.model('account', accountSchema , 'account' );
+let Sanpham=mongoose.model('sanpham',sanphamSchema,'sanpham');
+let Khachhang=mongoose.model('khachhang',khachhangSchema,'khachhang');
+let Dathang=mongoose.model('dondathang',dathangSchema,'dondathang');
+mongoose.connect('mongodb+srv://vietngo2k:15122000v@cluster0-jq5f7.mongodb.net/quanly_banhang',{
+    useNewUrlParser:true,useUnifiedTopology:true
+}).then(function (conn) {
+console.log('Connected');
+});
+
+
+
+
+app.engine('.hbs', hbs({
+    extname: 'hbs',
+    defaultLayout: '',
+    layoutsDir: '',
+}));
+
+app.set('view engine', '.hbs');
+
+app.use(express.static('public'));
+let storage = multer.diskStorage({
+//định nghĩa thư mục lưu file
+    destination: function (req, res, cb) {
+
+        cb(null, './public/images');
+    },
+    filename: function (req, file, cb) {
+        let filename = `${Date.now()}-Lucifer-Morningstar-${file.originalname}`;
+        if (!filename.endsWith(".jpg" || !filename.endsWith(".png")) ) {
+            console.log('ABC')
+            return cb("Vui lòng up file có đuôi là jpg và png",filename);
+        }
+        // console.log('./uploads/'+filename);
+
+        cb(null,filename)
+
+
+    }
+
+});
+// khởi tạo biến upload
+let upload = multer(
+    {
+        storage: storage, limits: {
+            fileSize: 2 * 1020 * 1024
+        }
+    });
+
+
+app.listen(1520);
+
+// app.get('/', function (req, res) {
+//
+//     res.render('index');
+// });
+
+// app.get('/add', function (req, res) {
+//
+//     res.render('add');
+// });
+app.post('/update', function (req, res) {
+    var id=req.body.ID;
+    var  username=req.body.USERNAME;
+    var pass=req.body.PASS;
+    var phone=req.body.PHONE;
+    res.render('update' ,{id,username,pass,phone});
+});
+
+app.post('/addA', async (req, res) => {
+    var  usernameA=req.body.userA;
+    var passA=req.body.passA;
+    var phoneA=req.body.phoneA;
+    const user =new User({
+        username: usernameA,
+        pass:passA,
+        phone: phoneA
+    });
+    try{
+        await user.save();
+        res.redirect('/admin')
+    }catch (e) {
+
+        res.send('Co loi xay ra' + e.message);
+    }
+
+
+
+
+});
+
+app.post('/updateA', async (req, res)=> {
+    try{
+        var a = req.body.idB;
+        var  usernameB=req.body.userB;
+        var passB=req.body.passB;
+        var phoneB=req.body.phoneB;
+        const stt =await User.findByIdAndUpdate(a,(
+            {username: usernameB,
+            pass: passB,
+            phone: phoneB}
+        ))
+        if(!stt){
+            res.end('khong tim thay')
+        }else {
+            res.redirect('/admin')
+        }
+    }catch (e) {
+
+    }
+
+
+
+});
+
+app.post('/delete', async (req, res) =>{
+
+try{
+   var a = req.body.ID;
+    const stt =await User.findByIdAndDelete(a);
+    let users = await User.find({});
+    try{
+        res.render('getall',{users});
+    }catch (e) {
+        res.send('co loi xay ra',e.message);
+    }
+
+}catch (e) {
+
+}
+
+});
+app.get('/admin', async (req, res) =>{
+
+let users = await User.find({});
+    try{
+    res.render('getall',{users});
+    }catch (e) {
+    res.send('co loi xay ra',e.message);
+    }
+
+});
+
+
+app.get('/khachhang', async (req, res) =>{
+
+    let khachhang = await Khachhang.find({});
+    try{
+        res.render('getallkhachhang',{khachhang});
+    }catch (e) {
+        res.send('co loi xay ra',e.message);
+    }
+
+});
+
+app.post('/addkh', async (req, res) => {
+    var  usernamekh=req.body.usernamekh;
+    var passkh=req.body.passkh;
+    var namekh=req.body.namekh;
+    var phonekh=req.body.phonekh;
+    var addresskh=req.body.addresskh;
+    const khachhang =new Khachhang({
+        usernamekh: usernamekh,
+        passkh:passkh,
+        namekh:namekh,
+        phonekh: phonekh,
+        addresskh:addresskh,
+
+    });
+    try{
+        await khachhang.save();
+        res.redirect('/khachhang')
+    }catch (e) {
+
+        res.send('Co loi xay ra' + e.message);
+    }
+
+});
+
+app.post('/updatekh', function (req, res) {
+    var idkh=req.body.IDKH;
+    var  usernamekh=req.body.USERNAMEKH;
+    var passkh=req.body.PASSKH;
+    var namekh=req.body.FULLNAMEKH;
+    var phonekh=req.body.PHONEKH;
+    var addresskh=req.body.ADDRESSKH;
+    res.render('updatekhachhang' ,{idkh,usernamekh,passkh,namekh,phonekh,addresskh});
+});
+
+app.post('/updatekhA', async (req, res)=> {
+    try{
+        var id = req.body.idkhU;
+        var  usernamekh=req.body.usernamekhU;
+        var passkh=req.body.passkhU;
+        var namekh=req.body.namekhU;
+        var phonekh=req.body.phonekhU;
+        var address=req.body.addresskhU;
+        const stt =await Khachhang.findByIdAndUpdate(id,(
+            {usernamekh: usernamekh,
+                passkh: passkh,
+                namekh: namekh,
+              phonekh: phonekh,
+                addresskh:address,
+            }
+        ))
+        if(!stt){
+            res.end('khong tim thay')
+        }else {
+            res.redirect('/khachhang')
+        }
+    }catch (e) {
+
+    }
+
+
+});
+app.post('/deletekh', async (req, res) =>{
+
+    try{
+        var a = req.body.IDKH;
+        const stt =await Khachhang.findByIdAndDelete(a);
+        let khachhang = await Khachhang.find({});
+        try{
+            res.render('getallkhachhang',{khachhang});
+        }catch (e) {
+            res.send('co loi xay ra',e.message);
+        }
+
+    }catch (e) {
+
+    }
+
+});
+app.get('/addsp', function (req, res) {
+
+    res.render('addsp');
+});
+
+app.post('/addspA', upload.single('avatar'), async(req, res)=>{
+    var  tensp=req.body.tensp;
+    var motasp=req.body.motasp;
+    var giasp=req.body.giasp;
+    var urlsp='../images/'+req.file.filename;
+    const sanpham =new Sanpham({
+        tensp: tensp,
+        motasp:motasp,
+        giasp: giasp,
+        urlsp: urlsp,
+    });
+    try{
+        await sanpham.save();
+        res.redirect('home')
+    }catch (e) {
+        res.send('Co loi xay ra' + e.message);
+    }
+    // req.file is the name of your file in the form above, here 'uploaded_file'
+    // req.body will hold the text fields, if there were any
+
+
+});
+
+
+app.get('/home', async (req, res) =>{
+    let sanpham = await Sanpham.find({})
+    try{
+
+        res.render('home',{sanpham})
+    }catch (e) {
+        res.send('co loi xay ra',e.message);
+
+    }
+
+});
+app.get('/deletesp/:id', async (req, res) =>{
+
+    try{
+
+        const stt =await Sanpham.findByIdAndDelete(req.params.id);
+        let sanpham = await Sanpham.find({});
+        try{
+            res.render('home',{sanpham});
+        }catch (e) {
+            res.send('co loi xay ra',e.message);
+        }
+
+    }catch (e) {
+
+    }
+
+});
+
+app.post('/updatesp', function (req, res) {
+    var idsp=req.body.idsp;
+    var  tensp=req.body.tensp;
+    var motasp=req.body.motasp;
+    var giasp=req.body.giasp;
+    var urlsp=req.body.urlsp
+
+    res.render('updatesp',{idsp,tensp,motasp,giasp,urlsp});
+});
+
+app.post('/updatespA', upload.single('avatar'), async (req, res)=> {
+    try{
+        var idsp=req.body.idspU;
+        var  tensp=req.body.tenspU;
+        var motasp=req.body.motaspU;
+        var giasp=req.body.giaspU;
+        var urlsp='../images/'+req.file.filename;
+        const stt =await Sanpham.findByIdAndUpdate(idsp,(
+            {tensp:tensp,
+                motasp:motasp,
+                giasp:giasp,
+                urlsp:urlsp,
+            }
+        ))
+        if(!stt){
+            res.end('khong tim thay')
+        }else {
+            res.redirect('home')
+        }
+    }catch (e) {
+
+    }
+
+
+});
+
+app.get('/getAllKhachhangJson' , async (req,res)=>{
+    let khachang=await Khachhang.find({});
+    res.send(khachang);
+});
+
+app.get('/getAllsanphamJson' , async (req,res) =>{
+    let sanpham=await Sanpham.find({});
+    res.send(sanpham);
+})
+
+app.post('/getalldathangg' , async (req,res) =>{
+
+    let makhachhangdathang = req.body.idkhachhang;
+    let dating=await Dathang.find({makhdh:  makhachhangdathang});
+     res.send(dating);
+});
+
+app.post('/xoaorder',async (req,res)=>{
+
+        try{
+            var iddathang=req.body.iddathang;
+            const stt =await Dathang.findByIdAndDelete(iddathang);
+           res.send('Delete successful!')
+        }catch (e) {
+            res.send('co loi xay ra',e.message);
+        }
+
+})
+
+app.post('/login',
+    async (req, res) => {
+        let condition = {
+            usernamekh: req.body.usernamekh,
+            passkh: req.body.passkh
+        };
+
+        console.log(req.body.usernamekh)
+        try {
+            const user = await Khachhang.findOne(condition);
+
+            if(!user){
+                res.send('Invalid username or password !12345678912345')
+            } else {
+                res.send(user._id);
+                //xét độ dài của send data để check login
+                // res.send('Login with '+user);
+            }
+        } catch (error) {
+            res.status(500).send(error);
+        }
+
+    });
+
+app.post('/signUp',async (req, res) => {
+
+    const u=new Khachhang(req.body);
+    try {
+        await u.save();
+        res.send('thành công');
+    }catch (error) {
+        res.status(500).send(error);
+    }
+
+});
+app.get('/getalldonhang' , async (req,res)=>{
+    let dathang=await Dathang.find({});
+    res.send(dathang);
+});
+
+app.post('/order',async(req,res)=>{
+    const u=new Dathang(req.body);
+    try {
+        await u.save();
+        res.send(u);
+    }catch (error) {
+        res.status(500).send(error);
+    }
+});
+//?????
+module.exports=app;

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <title>Bán ô tô </title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark" style="padding-left: 15%;">
+    <!-- Brand -->
+    <a class="navbar-brand" href="/trangchu">SHOP LG</a>
+    <!-- Links -->
+    <ul class="navbar-nav">
+
+      <!-- Dropdown -->
+      <li class="nav-item dropdown" style="margin: 5xp;">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          SẢN PHẨM
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/themsanpham">THÊM SẢN PHẨM</a>
+      </li>
+    </ul>
+
+  </nav>
+  <br>
+
+  <div class="container" style="margin-top: 30px;margin-bottom: 80px">
+    <h1 style="text-align: center;margin-bottom: 25px">Danh sách mặt hàng</h1>
+    <div style="display: grid;grid-template-columns: 1fr 1fr 1fr; grid-gap: 50px 30px">
+      {{#each sanpham }}
+      <div>
+        <form>
+          <img src="{{this.urlsp}}" width="100%" height="322px" style="margin-bottom: 15px">
+          <div>
+            <span>Mã sản phẩm: </span> <input style="border: 0" name="tensp" readonly value="{{this.masp}}"></input>
+          </div>
+          <div style="margin-bottom: 5px;margin-top: 5px">
+            <span>Nhãn sản phẩm: </span> <input style="border: 0" name="hangsp" readonly
+              value="{{this.nhanhieu}}"></input>
+          </div>
+          <div style="margin-bottom: 5px;margin-top: 5px">
+            <span>Năm sản xuất: </span> <input style="border: 0" name="loaisp" readonly value="{{this.namsx}}"></input>
+          </div>
+          <div style="margin-bottom: 5px;margin-top: 5px">
+            <span>Giá gốc: </span> <input style="border: 0" name="loaisp" readonly value="{{this.giagoc}}"></input>
+          </div>
+          <div style="margin-bottom: 10px;margin-top: 5px">
+            <span>Giá sản phẩm: </span> <input style="border: 0" name="giasp" readonly
+              value="{{this.giasp}}"></input><input type="hidden" style="border: 0" name="idsp" readonly
+              value="{{this._id}}"></input>
+          </div>
+          <input formmethod="post" class="btn btn-success" type="submit" formaction="/updatesp" value="Update"> <span>
+          </span>
+          <input formmethod="get" formaction="/deletesp/{{this._id}}" class="btn btn-danger" type="submit"
+            onclick="return confirm('có chắc chắn xóa')" value="Delete">
+        </form>
+
+      </div>
+
+      {{/each}}
+
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
